@@ -1,4 +1,5 @@
 //https://www.lintcode.com/problem/closest-binary-search-tree-value/
+//https://www.youtube.com/watch?v=-i67-JS-LFI
 
 public class ClosestBinarySearchTreeValue_270 {
 
@@ -66,6 +67,26 @@ public class ClosestBinarySearchTreeValue_270 {
 		min = Math.min(temp, min);
 	}
 
+	//Faster Solution
+	//TimeComplexity O(logN) because we are going either left or Right. Space Complexity O(1) because of Iterative approach
+	public static int closestValue2(TreeNode root, double target) {
+
+		int res = root.val;
+
+		while (root != null) {
+			if (Math.abs(target - root.val) < Math.abs(target - res)) {
+				res = root.val;
+			}
+			if (target < root.val) {
+				root = root.left;
+			} else {
+				root = root.right;
+			}
+		}
+
+		return res;
+	}
+
 	public static int closestValue(TreeNode root, double target) {
 		findMin(root, (int) Math.round(target));
 
@@ -77,7 +98,7 @@ public class ClosestBinarySearchTreeValue_270 {
 		double target = 5.571429;
 		ClosestBinarySearchTreeValue_270 findMinTree = new ClosestBinarySearchTreeValue_270();
 		findMinTree.insert(data);
-		System.out.println(closestValue(root, target));
+		//closestValue2 soln is better than closestValue1
+		System.out.println(closestValue2(root, target));
 	}
-
 }
