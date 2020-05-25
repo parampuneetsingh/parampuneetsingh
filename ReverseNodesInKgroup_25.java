@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 //https://leetcode.com/problems/reverse-nodes-in-k-group/
 //https://www.youtube.com/watch?v=QD9xEicaxxI
 
@@ -18,44 +20,37 @@ public class ReverseNodesInKgroup_25 {
 		return reverseKGroup2(head, k);
 	}
 
-	// reverse K nodes from prev, return the last node of k, if not enough,
-	// return null
-	private ListNode reverseK(ListNode prev, int k) {
-		ListNode head = prev.next;
-		ListNode last = head;
-
-		for (int i = 0; i < k; i++) {
-			if (head == null) {
-				return null;
-			}
-			ListNode next = head.next;
-			if (i > 0) {
-				ListNode tmp = prev.next;
-				prev.next = head;
-				last.next = next;
-				head.next = tmp;
-			}
-			head = next;
-		}
-		return last;
-	}
-
+	// Solution 2, Easy to understand
 	public ListNode reverseKGroup(ListNode head, int k) {
-		ListNode dump = new ListNode(0);
-		dump.next = head;
-		ListNode prev = dump;
+		ListNode res = new ListNode(-1);
+		ListNode curr = res;
+		boolean flag = false;
 
-		while (prev != null) {
-			ListNode tmp = reverseK(prev, k);
-			if (tmp == null) {
-				// if failed, swap again to go back to original order.
-				reverseK(prev, k);
+		Stack<ListNode> stk = new Stack<ListNode>();
+
+		while (head != null) {
+			ListNode start = head;
+			for (int i = 0; i < k; i++) {
+				if (head != null) {
+					ListNode s = new ListNode(head.val);
+					stk.push(s);
+					head = head.next;
+				} else {
+					curr.next = start;
+					flag = true;
+					break;
+				}
 			}
-			prev = tmp;
-		}
-		return dump.next;
-	}
 
+			while (!stk.isEmpty() && !flag) {
+				curr.next = stk.pop();
+				curr = curr.next;
+			}
+		}
+
+		return res.next;
+	}
+	
 	public ListNode reverseList(ListNode head) {
 		if (head == null || head.next == null) {
 			return head;
@@ -74,7 +69,7 @@ public class ReverseNodesInKgroup_25 {
 		return prev;
 	}
 
-	// Solution 2, Easy to understand
+	// Solution 1
 	public ListNode reverseKGroup2(ListNode head, int k) {
 		ListNode dummy = new ListNode(0);
 		dummy.next = head;
