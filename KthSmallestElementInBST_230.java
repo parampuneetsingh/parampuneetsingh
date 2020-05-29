@@ -15,9 +15,6 @@ public class KthSmallestElementInBST_230 {
 		}
 	}
 
-	int val = 0;
-	int min_val = 0;
-
 	public void dfs(TreeNode root) {
 		if (root == null) {
 			return;
@@ -32,24 +29,22 @@ public class KthSmallestElementInBST_230 {
 		dfs(root.right);
 	}
 
-	// Solution 2
-	public int kthSmallest2(TreeNode root, int k) {
-		val = k;
-
-		dfs(root);
-
-		return min_val;
-	}
-
-	public void inOrder(TreeNode root, List<Integer> res) {
-		if (root == null) {
-			return;
-		}
-
-		inOrder(root.left, res);
-		res.add(root.val);
-		inOrder(root.right, res);
-	}
+	// Solution 2 - Best Solution
+	 public int kthSmallest2(TreeNode root, int k) {
+	        Deque<TreeNode> stack = new LinkedList<TreeNode>();
+	        
+	        while(true) {
+	            while(root != null) {
+	                stack.add(root);
+	                root = root.left;
+	            }
+	            root = stack.removeLast();
+	            if (--k == 0) {
+	                return root.val;
+	            }
+	            root = root.right;
+	        }
+	    }
 
 	// Solution 1
 	public int kthSmallest(TreeNode root, int k) {
