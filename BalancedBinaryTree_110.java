@@ -78,7 +78,7 @@ public class BalancedBinaryTree_110 {
 		return true;
 	}
 
-	//DFS
+	// DFS
 	public boolean isBalanced(TreeNode root) {
 		if (root == null) {
 			return true;
@@ -92,6 +92,39 @@ public class BalancedBinaryTree_110 {
 			return 0;
 		}
 		return Math.max(getMaxDepth(root.left), getMaxDepth(root.right)) + 1;
+	}
+
+	class Wrapper {
+		int depth;
+		boolean balanced;
+
+		public Wrapper(int depth, boolean balanced) {
+			this.depth = depth;
+			this.balanced = balanced;
+		}
+	}
+
+	public Wrapper checkBalanced2(TreeNode root) {
+		if (root == null) {
+			return new Wrapper(0, true);
+		}
+
+		Wrapper left = checkBalanced2(root.left);
+		Wrapper right = checkBalanced2(root.right);
+
+		int max = Math.max(left.depth, right.depth) + 1;
+		boolean isBalanced = left.balanced && right.balanced && Math.abs(left.depth - right.depth) <= 1;
+
+		return new Wrapper(max, isBalanced);
+	}
+
+	//Linear Time Complexity Solution
+	public boolean isBalanced2(TreeNode root) {
+		if (root == null) {
+			return true;
+		}
+		
+		return checkBalanced2(root).balanced;
 	}
 
 	public static void main(String[] args) {
