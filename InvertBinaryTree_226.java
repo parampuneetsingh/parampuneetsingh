@@ -1,3 +1,6 @@
+import java.util.LinkedList;
+import java.util.Queue;
+
 public class InvertBinaryTree_226 {
 
 	TreeNode root;
@@ -17,27 +20,44 @@ public class InvertBinaryTree_226 {
 	public void invert() {
 		invertTree(root);
 	}
-	
+
+	// Recursive
+	public TreeNode invertTreeRecursive(TreeNode root) {
+		if (root == null) {
+			return null;
+		}
+		TreeNode right = invertTree(root.right);
+		TreeNode left = invertTree(root.left);
+		root.left = right;
+		root.right = left;
+		return root;
+	}
+
+	// BFS
 	public TreeNode invertTree(TreeNode root) {
 		if (root == null) {
 			return null;
 		}
-		TreeNode output = new TreeNode(root.val);
-		return helper(root.left, root.right, output);
-	}
 
-	public TreeNode helper(TreeNode left, TreeNode right, TreeNode res) {
-		if (left != null && right != null) {
-			res.left = right;
-			res.right = left;
+		Queue<TreeNode> q = new LinkedList<TreeNode>();
+
+		q.add(root);
+
+		while (q.size() > 0) {
+			TreeNode current = q.poll();
+			TreeNode temp = current.left;
+			current.left = current.right;
+			current.right = temp;
+
+			if (current.left != null) {
+				q.add(current.left);
+			}
+
+			if (current.right != null) {
+				q.add(current.right);
+			}
 		}
-		if (right.left != null && right.right != null) {
-			helper(right.left, right.right, res);
-		}
-		if (left.left != null && left.right != null) {
-			helper(left.left, right.right, res);
-		}
-		return res;
+		return root;
 	}
 
 	public void insert(int[] data) {
@@ -73,7 +93,7 @@ public class InvertBinaryTree_226 {
 
 		return root;
 	}
-	
+
 	public static void main(String[] args) {
 		InvertBinaryTree_226 tree = new InvertBinaryTree_226();
 		int data[] = { 4, 2, 7, 1, 3, 6, 9 };
