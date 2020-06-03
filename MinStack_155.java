@@ -1,50 +1,56 @@
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 //https://leetcode.com/problems/min-stack/
+//https://www.youtube.com/watch?v=8Ub73n4ySYk
 
 public class MinStack_155 {
 
-	int size = 0;
-	List<Integer> min;
-	List<Integer> stackList;
+	TopStack stack;
+
+	class TopStack {
+		int min;
+		int value;
+		TopStack next;
+
+		public TopStack(int value) {
+			this.min = value;
+			this.value = value;
+			next = null;
+		}
+	}
 
 	/** initialize your data structure here. */
 	public MinStack_155() {
-		stackList = new ArrayList<Integer>();
-		size = 0;
-		min = new ArrayList<Integer>();
+		stack = null;
 	}
 
 	public void push(int x) {
-		if (min.isEmpty()) {
-			min.add(x);
+		if (stack == null) {
+			stack = new TopStack(x);
 		} else {
-			if (x < min.get(size - 1)) {
-				min.add(x);
-			} else {
-				min.add(min.get(size - 1));
-			}
+			TopStack temp = new TopStack(x);
+			temp.next = stack;
+			temp.min = Math.min(x, stack.min);
+			stack = temp;
 		}
-		stackList.add(x);
-		size++;
 	}
 
 	public void pop() {
-		if (size > 0) {
-			stackList.remove(size - 1);
-			min.remove(size - 1);
-			size--;
+		if (stack != null) {
+			stack = stack.next;
 		}
 	}
 
 	public int top() {
-		return stackList.get(size - 1);
+		if (stack == null) {
+			return -1;
+		}
+		return stack.value;
 	}
 
 	public int getMin() {
-		return min.get(size - 1);
+		if (stack == null) {
+			return -1;
+		}
+		return stack.min;
 	}
 
 	public static void main(String[] args) {

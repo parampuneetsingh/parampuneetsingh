@@ -53,11 +53,50 @@ public class SetMatrixZeroes_73 {
 		}
 	}
 
+	public void setZeroes2(int[][] matrix) {
+		int n = matrix.length, m = matrix[0].length;
+		boolean[] row = new boolean[n];
+		boolean[] column = new boolean[m];
+
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < m; j++) {
+				if (matrix[i][j] == 0) {
+					row[i] = true;
+					column[j] = true;
+				}
+			}
+		}
+
+		for (int i = 0; i < n; i++) {
+			if (row[i]) {
+				nullifyRow(matrix, i);
+			}
+		}
+
+		for (int j = 0; j < m; j++) {
+			if (column[j]) {
+				nullifyCol(matrix, j);
+			}
+		}
+	}
+
+	public void nullifyRow(int[][] matrix, int row) {
+		for (int i = 0; i < matrix[0].length; i++) {
+			matrix[row][i] = 0;
+		}
+	}
+
+	public void nullifyCol(int[][] matrix, int col) {
+		for (int i = 0; i < matrix.length; i++) {
+			matrix[i][col] = 0;
+		}
+	}
+
 	public static void main(String[] args) {
 		SetMatrixZeroes_73 setMatrix = new SetMatrixZeroes_73();
 		// int[][] matrix = { { 1, 1, 1 }, { 1, 0, 1 }, { 1, 1, 1 } };
 		int[][] matrix = { { 0, 1, 2, 0 }, { 3, 4, 5, 2 }, { 1, 3, 1, 5 } };
-		//int[][] matrix = { { -2147483648 }, { 2 }, { 3 } };
+		// int[][] matrix = { { -2147483648 }, { 2 }, { 3 } };
 		setMatrix.setZeroes(matrix);
 	}
 
