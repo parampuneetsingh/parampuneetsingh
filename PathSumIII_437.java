@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+
 //https://leetcode.com/problems/path-sum-iii/
 public class PathSumIII_437 {
 
@@ -5,31 +8,9 @@ public class PathSumIII_437 {
 
 	int total = 0;
 
-	public void recurTree(TreeNode root, int sum, int currentSum) {
-		if (root != null) {
+	List<Integer> list = new ArrayList<Integer>();
 
-			currentSum += root.val;
-			if (currentSum == sum) {
-				total++;
-			}
-
-			recurTree(root.left, sum, currentSum);
-			recurTree(root.right, sum, currentSum);
-		}
-	}
-
-	//Solution 2
-	public int pathSum2(TreeNode root, int sum) {
-		if (root != null) {
-			recurTree(root, sum, 0);
-			pathSum(root.left, sum);
-			pathSum(root.right, sum);
-		}
-
-		return total;
-	}
-
-	private int countPath(TreeNode root, int target) {
+	private int countPath2(TreeNode root, int target) {
 		int count = 0;
 		if (root == null) {
 			return count;
@@ -38,18 +19,48 @@ public class PathSumIII_437 {
 			count++;
 		}
 
-		count += countPath(root.left, target - root.val);
-		count += countPath(root.right, target - root.val);
+		count += countPath2(root.left, target - root.val);
+		count += countPath2(root.right, target - root.val);
 		return count;
 	}
 
-	// Solution1
+	// Solution1 - O(n^2)
+	public int pathSum2(TreeNode root, int sum) {
+		if (root == null) {
+			return 0;
+		}
+
+		return countPath2(root, sum) + pathSum2(root.left, sum) + pathSum2(root.right, sum);
+	}
+
+	public void countPath(TreeNode root, int sum) {
+		if (root == null) {
+			return;
+		}
+
+		list.add(root.val);
+		countPath(root.left, sum);
+		countPath(root.right, sum);
+
+		int t = 0;
+		for (int i = list.size() - 1; i >= 0; i--) {
+			t += list.get(i);
+			if (t == sum) {
+				total++;
+			}
+		}
+
+		list.remove(list.size() - 1);
+	}
+
+	// Solution1 - O(n)
 	public int pathSum(TreeNode root, int sum) {
 		if (root == null) {
 			return 0;
 		}
 
-		return countPath(root, sum) + pathSum(root.left, sum) + pathSum(root.right, sum);
+		countPath(root, sum);
+		return total;
 	}
 
 	public static void main(String[] args) {

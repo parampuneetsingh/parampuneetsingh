@@ -1,7 +1,8 @@
+//https://leetcode.com/problems/add-binary/
 
 public class AddBinary_67 {
 
-	public String addBinaryStrings(String a, String b) {
+	public String addBinary(String a, String b) {
 		StringBuilder sb = new StringBuilder();
 		int i = a.length() - 1, j = b.length() - 1, carry = 0;
 		while (i >= 0 || j >= 0) {
@@ -20,35 +21,50 @@ public class AddBinary_67 {
 		return sb.reverse().toString();
 	}
 
-	public String addBinaryStrings_2(String a, String b) {
-		StringBuilder sb = new StringBuilder();
-		int S1 = a.length() - 1, S2 = b.length() - 1;
-		int sum = 0;
-		int carry = 0;
-		while (S1 >= 0 || S2 >= 0) {
-			int tempA = 0, tempB = 0;
-			if (S1 >= 0) {
-				tempA = a.charAt(S1) - '0';
-				S1--;
-			}
-			if (S2 >= 0) {
-				tempB = b.charAt(S2) - '0';
-				S2--;
-			}
-			sum = tempA + tempB + carry;
-			sb.append(sum % 2);
-			carry = sum / 2;
+	private String padding(String a, int n) {
+		StringBuilder sb = new StringBuilder(a);
+
+		while (n-- > 0) {
+			sb.insert(0, '0');
 		}
-		if (carry != 0)
-			sb.append(carry);
-		return sb.reverse().toString();
+
+		return sb.toString();
+	}
+
+	public String addBinary2(String a, String b) {
+		StringBuilder sb = new StringBuilder();
+
+		if (a.length() < b.length()) {
+			a = padding(a, b.length() - a.length());
+		} else if (b.length() < a.length()) {
+			b = padding(b, a.length() - b.length());
+		}
+
+		int carry = 0;
+
+		for (int i = a.length() - 1; i >= 0; i--) {
+			int x = a.charAt(i) - '0';
+			int y = b.charAt(i) - '0';
+
+			sb.insert(0, (x ^ y) ^ carry);
+			carry = (x & y) | (x & carry) | (y & carry);
+		}
+
+		if (carry == 1) {
+			sb.insert(0, carry);
+		}
+
+		return sb.toString();
 	}
 
 	public static void main(String[] args) {
-		String a = "123";
-		String b = "1251";
+		/*
+		 * String a = "123"; String b = "1251";
+		 */
+		String a = "11";
+		String b = "1";
 		AddBinary_67 sum = new AddBinary_67();
-		String resp = sum.addBinaryStrings_2(a, b);
+		String resp = sum.addBinary2(a, b);
 		System.out.println(resp);
 	}
 
