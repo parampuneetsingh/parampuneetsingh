@@ -53,7 +53,7 @@ public class AddandSearchWord_DataStructureDesignWithMap_211 {
 			char c = word.charAt(i);
 			if (c == '.') {
 				for (TrieNode node : curr.children.values()) {
-					if (searchHelper(word.substring(i + 1, word.length()), node)) {
+					if (searchHelper(word.substring(i + 1), node)) {
 						return true;
 					}
 				}
