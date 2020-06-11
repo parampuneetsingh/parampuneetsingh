@@ -1,3 +1,8 @@
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+
 //https://leetcode.com/problems/smallest-subtree-with-all-the-deepest-nodes
 
 public class SmallestSubtreewithalltheDeepestNodes_865 {
@@ -14,7 +19,8 @@ public class SmallestSubtreewithalltheDeepestNodes_865 {
 		}
 	}
 
-	public TreeNode subtreeWithAllDeepest(TreeNode root) {
+	// Solution 1
+	public TreeNode subtreeWithAllDeepestDFS(TreeNode root) {
 		if (root == null) {
 			return null;
 		}
@@ -49,8 +55,75 @@ public class SmallestSubtreewithalltheDeepestNodes_865 {
 		return left.height == right.height ? new Node(root, left.height) : left.height > right.height ? left : right;
 	}
 
+	// Solution 2
+	public TreeNode subtreeWithAllDeepest(TreeNode root) {
+		if (root == null) {
+			return null;
+		}
+
+		int maxDepth = -1;
+		Map<TreeNode, Integer> map = new HashMap<TreeNode, Integer>();
+
+		populateMap(root, map);
+
+		for (int i : map.values()) {
+			maxDepth = Math.max(maxDepth, i);
+		}
+
+		return resultNode(root, maxDepth, map);
+	}
+
+	public TreeNode resultNode(TreeNode root, int maxDepth, Map<TreeNode, Integer> map) {
+
+		if (root == null) {
+			return null;
+		}
+
+		if (map.get(root) == maxDepth) {
+			return root;
+		}
+
+		TreeNode left = resultNode(root.left, maxDepth, map);
+		TreeNode right = resultNode(root.right, maxDepth, map);
+
+		if (left != null && right != null)
+			return root;
+		if (left != null)
+			return left;
+		if (right != null)
+			return right;
+
+		return null;
+	}
+
+	public void populateMap(TreeNode root, Map<TreeNode, Integer> map) {
+		Queue<TreeNode> q = new LinkedList<TreeNode>();
+		Queue<Integer> depth = new LinkedList<Integer>();
+
+		q.add(root);
+		depth.add(0);
+
+		while (!q.isEmpty()) {
+			TreeNode t = q.poll();
+			int d = depth.poll();
+
+			map.put(t, d);
+
+			if (t.left != null) {
+				q.add(t.left);
+				depth.add(d + 1);
+			}
+
+			if (t.right != null) {
+				q.add(t.right);
+				depth.add(d + 1);
+			}
+		}
+	}
+
 	public void findDeepest() {
-		subtreeWithAllDeepest(root);
+		subtreeWithAllDeepestDFS(root);
+		// subtreeWithAllDeepest(root);
 	}
 
 	public static void main(String[] args) {

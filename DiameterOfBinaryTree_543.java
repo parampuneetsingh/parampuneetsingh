@@ -62,17 +62,43 @@ public class DiameterOfBinaryTree_543 {
 		return Math.max(left, right) + 1;
 	}
 
-	public void traverse() {
-		diameterOfBinaryTree(root);
-	}
-	
-	public int diameterOfBinaryTree(TreeNode root) {
+	//With Global Variable
+	public int diameterOfBinaryTree2(TreeNode root) {
 		if (root == null) {
 			return 0;
 		}
 
 		findDiameter(root);
 		return max;
+	}
+	
+	public int findDiameter(TreeNode root, int[] max) {
+		if (root == null) {
+			return 0;
+		}
+
+		int left = findDiameter(root.left, max);
+		int right = findDiameter(root.right, max);
+
+		max[0] = Math.max(max[0], left + right);
+
+		return Math.max(left, right) + 1;
+	}
+
+	//Without Global Variable
+	public int diameterOfBinaryTree(TreeNode root) {
+		if (root == null) {
+			return 0;
+		}
+
+		int[] max = new int[1];
+		
+		findDiameter(root, max);
+		return max[0];
+	}
+	
+	public void traverse() {
+		diameterOfBinaryTree(root);
 	}
 
 	public static void main(String[] args) {
