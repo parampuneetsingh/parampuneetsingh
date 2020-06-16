@@ -1,7 +1,10 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+
+//https://www.youtube.com/watch?v=iB6clONG2qU
 
 public class InsertDeleteGetRandomO1_380 {
 
@@ -21,14 +24,14 @@ public class InsertDeleteGetRandomO1_380 {
 	 * the specified element.
 	 */
 	public boolean insert(int val) {
-		if (map.containsKey(val)) {
-			return false;
-		}
-
-		list.add(val);
-		map.put(val, list.size());
-
-		return true;
+        if (map.containsKey(val)) {
+            return false;
+        }
+        
+        map.put(val, list.size());        
+        list.add(val);
+        
+        return true;
 	}
 
 	/**
@@ -40,8 +43,19 @@ public class InsertDeleteGetRandomO1_380 {
 			return false;
 		}
 
-		map.remove(val);
-		return list.remove((Integer) val);
+		int index = map.remove(val), size = list.size(), last = list.get(size - 1);
+
+		if (last != val) {
+			Collections.swap(list, index, size - 1); // Swap the index with last index to remove. Bcoz last give removal
+														// in ArrayList is O(1)
+			map.put(last, index);	//Update the chane in Map
+		}
+		
+		list.remove(size - 1);
+		return true;
+		
+		// map.remove(val);
+		// return list.remove((Integer) val);
 	}
 
 	/** Get a random element from the set. */

@@ -49,27 +49,9 @@ public class ClosestBinarySearchTreeValue_270 {
 		return root;
 	}
 
-	static int min = Integer.MAX_VALUE;
-	static int resp;
-
-	public static void findMin(TreeNode root, int target) {
-		if (root == null) {
-			return;
-		}
-
-		findMin(root.left, target);
-		findMin(root.right, target);
-
-		int temp = Math.abs(root.val - target);
-		if (temp < min) {
-			resp = root.val;
-		}
-		min = Math.min(temp, min);
-	}
-
 	//Faster Solution
 	//TimeComplexity O(logN) because we are going either left or Right. Space Complexity O(1) because of Iterative approach
-	public static int closestValue2(TreeNode root, double target) {
+	public static int closestValue(TreeNode root, double target) {
 
 		int res = root.val;
 
@@ -87,18 +69,13 @@ public class ClosestBinarySearchTreeValue_270 {
 		return res;
 	}
 
-	public static int closestValue(TreeNode root, double target) {
-		findMin(root, (int) Math.round(target));
-
-		return resp;
-	}
-
 	public static void main(String[] args) {
 		int[] data = { 2, 1, 3 };
 		double target = 5.571429;
 		ClosestBinarySearchTreeValue_270 findMinTree = new ClosestBinarySearchTreeValue_270();
 		findMinTree.insert(data);
 		//closestValue2 soln is better than closestValue1
-		System.out.println(closestValue2(root, target));
+		System.out.println(closestValue(root, target));
 	}
+
 }
