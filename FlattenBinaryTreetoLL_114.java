@@ -1,5 +1,8 @@
+import java.util.Stack;
+
 //https://leetcode.com/problems/flatten-binary-tree-to-linked-list/
 //https://leetcode.com/problems/flatten-binary-tree-to-linked-list/discuss/290593/0-ms-beats-100-Java-Solution-With-Explanation
+//https://www.youtube.com/watch?v=vssbwPkarPQ
 
 public class FlattenBinaryTreetoLL_114 {
 
@@ -21,9 +24,12 @@ public class FlattenBinaryTreetoLL_114 {
             return;
         }
         
-        flattenTree(root);
+        flatten(root);
+        //In-Place solution
+        //flattenTree(root);
     }
     
+	//In-Place solution
     public TreeNode flattenTree(TreeNode root) {
         TreeNode leftFlatTree;
         TreeNode rightFlatTree;
@@ -53,6 +59,34 @@ public class FlattenBinaryTreetoLL_114 {
         
         root.left = null;
         return root;
+    }
+    
+    //Space Complexity O(n)
+    public void flatten(TreeNode root) {
+        if (root == null) return;
+            
+        Stack<TreeNode> stack = new Stack<TreeNode>();
+        
+        stack.push(root);
+        
+        while(!stack.isEmpty()) {
+            TreeNode curr = stack.pop();
+            
+            if (curr.right != null) {
+                stack.push(curr.right);
+            }
+            
+            if (curr.left != null) {
+                stack.push(curr.left);
+            }
+            
+            if(!stack.isEmpty()) {
+                curr.right = stack.peek();    
+            }
+            
+            curr.left = null;
+        }
+        
     }
     
     public void insert(int[] data) {

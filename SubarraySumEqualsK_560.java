@@ -7,14 +7,8 @@ public class SubarraySumEqualsK_560 {
 
 	public int subarraySum(int[] nums, int k) {
 		HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();
-		int[] subAry = new int[nums.length];
 		int count = 0;
 		int curr_sum = 0;
-		subAry[0] = nums[0];
-
-		for (int i = 1; i < nums.length; i++) {
-			subAry[i] = nums[i] + subAry[i - 1];
-		}
 
 		for (int j = 0; j < nums.length; j++) {
 			curr_sum += nums[j];
