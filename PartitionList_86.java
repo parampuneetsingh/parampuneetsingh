@@ -23,34 +23,32 @@ public class PartitionList_86 {
 		head = temp;
 	}
 
-	public ListNode partition(ListNode head, int x) {
+    public ListNode partition(ListNode head, int x) {
 		if (head == null || head.next == null) {
 			return head;
 		}
-
-		ListNode dummy = new ListNode(0);
-		ListNode result = dummy;
-
-		ListNode node1 = head;
-		while (node1 != null) {
-			if (node1.val < x) {
-				dummy.next = new ListNode(node1.val);
-				dummy = dummy.next;
-			}
-			node1 = node1.next;
-		}
-
-		ListNode node2 = head;
-		while (node2 != null) {
-			if (node2.val >= x) {
-				dummy.next = new ListNode(node2.val);
-				dummy = dummy.next;
-			}
-			node2 = node2.next;
-		}
-
-		return result.next;
-	}
+        
+        ListNode beforeMax = new ListNode(-1);
+        ListNode node1 = beforeMax;
+        
+        ListNode afterMax = new ListNode(-1);
+        ListNode node2 = afterMax;
+        
+        while(head != null) {
+            if (head.val < x) {
+                node1.next = new ListNode(head.val);
+                node1 = node1.next;
+            } else {
+                node2.next = new ListNode(head.val);
+                node2 = node2.next;
+            }
+            head = head.next;
+        }
+        
+        node1.next = afterMax.next;
+        
+        return beforeMax.next;
+    }
 
 	public static void main(String[] args) {
 		PartitionList_86 createLinkedList = new PartitionList_86();

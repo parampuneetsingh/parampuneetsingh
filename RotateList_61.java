@@ -24,7 +24,7 @@ public class RotateList_61 {
 	}
 
 	public void rotateList(int k) {
-		rotateRight(head, k);
+		rotateRight2(head, k);
 	}
 
 	public ListNode rotateRight(ListNode head, int k) {
@@ -63,6 +63,51 @@ public class RotateList_61 {
 		prev.next = null;
 
 		return newHead;
+	}
+
+	// Solution 2
+	public ListNode rotateRight2(ListNode head, int k) {
+		if (head == null || head.next == null)
+			return head;
+
+		if (k == 0) {
+			return head;
+		}
+
+		int len = 0;
+
+		ListNode curr = head;
+
+		while (curr != null) {
+			curr = curr.next;
+			len++;
+		}
+
+		ListNode node = head;
+
+		int n = 0;
+
+		if (k < len) {
+			n = len - k;
+		} else {
+			n = len - (k % len);
+		}
+
+		while (n > 0) {
+			ListNode t = node;
+			ListNode l = node.next;
+			node = l;
+			t.next = null;
+
+			while (l.next != null) {
+				l = l.next;
+			}
+
+			l.next = t;
+			n--;
+		}
+
+		return node;
 	}
 
 	public static void main(String[] args) {

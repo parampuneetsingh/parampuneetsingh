@@ -91,11 +91,34 @@ public class BinaryTreeVerticalOrderTraversal_314 {
 		return resp;
 	}
 
+	private void findVerticalNodes(TreeNode root, TreeMap<Integer, ArrayList<Integer>> map, int depth) {
+		if (root == null) {
+			return;
+		}
+
+		map.putIfAbsent(depth, new ArrayList<Integer>());
+		map.get(depth).add(root.val);
+		findVerticalNodes(root.left, map, depth - 1);
+		findVerticalNodes(root.right, map, depth + 1);
+	}
+
+	//DFS Solution - Not passing all test cases
+	public List<List<Integer>> verticalOrder2(TreeNode root) {
+		List<List<Integer>> resp = new ArrayList<List<Integer>>();
+		TreeMap<Integer, ArrayList<Integer>> map = new TreeMap<Integer, ArrayList<Integer>>();
+
+		findVerticalNodes(root, map, 0);
+
+		resp.addAll(map.values());
+
+		return resp;
+	}
+
 	public static void main(String[] args) {
 		BinaryTreeVerticalOrderTraversal_314 tree = new BinaryTreeVerticalOrderTraversal_314();
 		int data[] = { 1, 2, 3, 4, 5, 6, 7 };
 		tree.insert(data);
-		System.out.println(tree.verticalOrder(root));
+		System.out.println(tree.verticalOrder2(root));
 	}
 
 }
