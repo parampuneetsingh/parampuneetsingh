@@ -1,31 +1,32 @@
-import java.util.Arrays;
-
 //https://leetcode.com/problems/find-the-duplicate-number/
 //https://www.youtube.com/watch?v=s_nYIsbPqqQ
 
 public class FindDuplicateNumber_287 {
 
-	// O(nlogn) complexity because of Arrays.sort
-	public int binarySearch(int[] nums, int low, int high) {
-		Arrays.sort(nums);
+	//Recommended Solution
+	public int findDuplicate(int[] nums) {
+		// Find the intersection point of the two runners.
+		int slow = nums[0];
+		int fast = nums[0];
 
-		while (low < high) {
-			int mid = low + (high - low) / 2;
+		do {
+			slow = nums[slow];
+			fast = nums[nums[fast]];
+		} while (slow != fast);
 
-			if (nums[mid] == nums[mid + 1]) {
-				return nums[mid];
-			} else if (mid < nums[mid]) {
-				low = mid + 1;
-			} else {
-				high = mid - 1;
-			}
+		// Find the "entrance" to the cycle.
+		slow = nums[0];
+
+		while (slow != fast) {
+			slow = nums[slow];
+			fast = nums[fast];
 		}
 
-		return nums[low];
+		return slow;
 	}
 
 	// Accepted Solution - Time Complexity O(n), space complexity O(1)
-	public int findDuplicate(int[] nums) {
+	public int findDuplicate3(int[] nums) {
 		for (int i = 0; i < nums.length; i++) {
 			int index = Math.abs(nums[i]);
 
@@ -55,7 +56,7 @@ public class FindDuplicateNumber_287 {
 	public static void main(String[] args) {
 		FindDuplicateNumber_287 find = new FindDuplicateNumber_287();
 		int[] nums = { 1, 3, 4, 2, 2 };
-		find.binarySearch(nums, 0, nums.length - 1);
+		//Solution 1 is recommended
 		System.out.println(find.findDuplicate(nums));
 	}
 }
